@@ -3,13 +3,21 @@ import requests
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_404_NOT_FOUND,
-    HTTP_200_OK
+    HTTP_200_OK,
+    HTTP_401_UNAUTHORIZED
 )
 from rest_framework.decorators import api_view
 
 
 @api_view(["POST"])
 def getweather(request):
+    user = request.user
+    account = user.account
+    if not account or not account.is_verified:
+        return Response(
+            {'status': 'User email is not verified'},
+            status=HTTP_401_UNAUTHORIZED
+        )
     city = request.data.get("city")
     country = request.data.get("country")
 
