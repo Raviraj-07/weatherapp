@@ -1,0 +1,67 @@
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
+    # Create a dummy node to simplify the result list construction
+    dummy = ListNode(0)
+    current = dummy
+    carry = 0
+    
+    # Traverse both linked lists
+    while l1 is not None or l2 is not None or carry:
+        # Get the values from the current nodes (if they exist)
+        val1 = l1.val if l1 is not None else 0
+        val2 = l2.val if l2 is not None else 0
+        
+        # Calculate the sum and the carry
+        total = val1 + val2 + carry
+        carry = total // 10
+        current.next = ListNode(total % 10)  # Create a new node with the digit
+        current = current.next  # Move to the next node
+        
+        # Move to the next nodes in the linked lists
+        if l1 is not None:
+            l1 = l1.next
+        if l2 is not None:
+            l2 = l2.next
+    
+    # Return the next node of the dummy node, which is the head of the result list
+    return dummy.next
+
+def printLinkedList(head: ListNode):
+    """Helper function to print the linked list."""
+    current = head
+    while current:
+        print(current.val, end=" -> ")
+        current = current.next
+    print("None")
+
+def createLinkedList(numbers):
+    """Helper function to create a linked list from a list of numbers."""
+    dummy = ListNode(0)
+    current = dummy
+    for number in numbers:
+        current.next = ListNode(number)
+        current = current.next
+    return dummy.next
+
+def main():
+    # Example usage
+    print("Creating linked list for number 342 (stored as 2 -> 4 -> 3):")
+    l1 = createLinkedList([2, 4, 3])
+    printLinkedList(l1)
+
+    print("Creating linked list for number 465 (stored as 5 -> 6 -> 4):")
+    l2 = createLinkedList([5, 6, 4])
+    printLinkedList(l2)
+
+    print("Adding the two numbers...")
+    result = addTwoNumbers(l1, l2)
+
+    print("Result linked list (sum):")
+    printLinkedList(result)
+
+if __name__ == "__main__":
+    main()
